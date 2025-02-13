@@ -17,6 +17,7 @@ import { initializeDbCache } from "./cache/index.ts";
 import { character } from "./character.ts";
 import { startChat } from "./chat/index.ts";
 import { initializeClients } from "./clients/index.ts";
+import APYMonitorPlugin from './plugins/apy-monitor/index.js';
 import {
   getTokenForProvider,
   loadCharacters,
@@ -56,6 +57,7 @@ export function createAgent(
     evaluators: [],
     character,
     plugins: [
+      APYMonitorPlugin,
       bootstrapPlugin,
       nodePlugin,
       character.settings?.secrets?.WALLET_PUBLIC_KEY ? solanaPlugin : null,

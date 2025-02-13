@@ -1,19 +1,14 @@
-import { PostgresDatabaseAdapter } from "@elizaos/adapter-postgres";
-import { SqliteDatabaseAdapter } from "@elizaos/adapter-sqlite";
-import Database from "better-sqlite3";
+import { SupabaseDatabaseAdapter } from "./adapter-supabase/src/index.js";
 import path from "path";
 
 export function initializeDatabase(dataDir: string) {
-  if (process.env.POSTGRES_URL) {
-    const db = new PostgresDatabaseAdapter({
-      connectionString: process.env.POSTGRES_URL,
-    });
+  if (process.env.SUPABASE_URL && process.env.SUPABASE_KEY) {
+    const db = new SupabaseDatabaseAdapter(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_KEY
+    );
     return db;
   } else {
-    const filePath =
-      process.env.SQLITE_FILE ?? path.resolve(dataDir, "db.sqlite");
-    // ":memory:";
-    const db = new SqliteDatabaseAdapter(new Database(filePath));
-    return db;
+    throw new Error("SUPABASE_URL and SUPABASE_KEY environment variables are required");
   }
 }
